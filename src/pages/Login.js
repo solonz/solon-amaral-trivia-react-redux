@@ -1,5 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
+import getApi from '../services/api';
 
 class Login extends React.Component {
   state = {
@@ -12,6 +13,12 @@ class Login extends React.Component {
     const check = /\S+@\S+\.\S+/;
     if (check.test(email) && name.length !== 0) return false;
     return true;
+  }
+
+  fetchToken = async () => {
+    await getApi();
+    const { history } = this.props;
+    history.push('/game');
   }
 
   render() {
@@ -40,8 +47,9 @@ class Login extends React.Component {
           />
         </label>
         <button
-          type="submit"
+          type="button"
           data-testid="btn-play"
+          onClick={ this.fetchToken }
           disabled={ this.emailValidation() }
         >
           Play
