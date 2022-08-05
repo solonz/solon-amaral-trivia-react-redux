@@ -7,7 +7,6 @@ class Login extends Component {
     this.state = {
       userName: '',
       email: '',
-      buttonDisabled: true,
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -16,12 +15,11 @@ class Login extends Component {
     const { name, value } = target;
     this.setState({
       [name]: value,
-      buttonDisabled: false,
     });
   }
 
   render() {
-    const { userName, email, buttonDisabled } = this.state;
+    const { userName, email } = this.state;
     return (
       <form action="">
         <input
@@ -41,7 +39,7 @@ class Login extends Component {
           value={ email }
         />
         <button
-          disabled={ buttonDisabled }
+          disabled={ !((userName.length > 0 && email.length > 0)) }
           data-testid="btn-play"
           type="button"
         >
