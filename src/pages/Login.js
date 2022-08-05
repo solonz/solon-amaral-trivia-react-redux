@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types';
 
 class Login extends React.Component {
   state = {
@@ -15,8 +16,9 @@ class Login extends React.Component {
 
   render() {
     const { name, email } = this.state;
+    const { history } = this.props;
     return (
-      <form>
+      <form autoComplete="off">
         <label htmlFor="name">
           <input
             value={ name }
@@ -44,9 +46,21 @@ class Login extends React.Component {
         >
           Play
         </button>
+        <button
+          type="button"
+          data-testid="btn-settings"
+          onClick={ () => history.push('/config') }
+        >
+          Configurações
+
+        </button>
       </form>
     );
   }
 }
+
+Login.propTypes = {
+  history: propTypes.objectOf(propTypes.any).isRequired,
+};
 
 export default Login;
