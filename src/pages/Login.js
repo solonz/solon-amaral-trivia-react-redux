@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import fetchTokenTrivia from '../services';
+
 // import { connect } from 'react-redux';
 
 class Login extends Component {
@@ -9,6 +12,13 @@ class Login extends Component {
       email: '',
     };
     this.handleChange = this.handleChange.bind(this);
+    this.configPagePush = this.configPagePush.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  configPagePush = () => {
+    const { history } = this.props;
+    history.push('/configuracao');
   }
 
   handleChange({ target }) {
@@ -16,6 +26,13 @@ class Login extends Component {
     this.setState({
       [name]: value,
     });
+  }
+
+  async handleClick() {
+    const token = await fetchTokenTrivia();
+    localStorage.setItem('token', token);
+    const { history } = this.props;
+    history.push('/game');
   }
 
   render() {
@@ -42,12 +59,26 @@ class Login extends Component {
           disabled={ !((userName.length > 0 && email.length > 0)) }
           data-testid="btn-play"
           type="button"
+          onClick={ this.handleClick }
         >
           Play
+        </button>
+        <button
+          data-testid="btn-settings"
+          type="button"
+          onClick={ this.configPagePush }
+        >
+          Configurações
         </button>
       </form>
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
 
 export default Login;
