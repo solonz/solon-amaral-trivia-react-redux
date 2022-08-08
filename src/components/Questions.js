@@ -2,14 +2,53 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class Questions extends Component {
-  render() {
+  constructor() {
+    super();
+
+    this.state = {
+      timer: 30,
+      disabled: false,
+      answers: [],
+    };
+  }
+
+  componentDidMount() {
+    this.timer();
+    this.randomAswers();
+  }
+
+  timer = () => {
+    const oneSec = 1000;
+    setInterval(() => this.setState((prevState) => ({
+      timer: prevState.timer - 1,
+    }), this.clearTimer), oneSec);
+  }
+
+  clearTimer = () => {
+    const { timer } = this.state;
+    if (timer === 0) {
+      this.setState({ disabled: true });
+    }
+  }
+
+  randomAswers = () => {
     const { question } = this.props;
     const half = 0.5;
     const answers = [question.correct_answer, ...question.incorrect_answers]
       .sort(() => Math.random() - half);
-    console.log(answers);
+    this.setState({ answers });
+  }
+
+  render() {
+    const { question } = this.props;
+    const { timer, disabled, answers } = this.state;
+    // const half = 0.5;
+    // const answers = [question.correct_answer, ...question.incorrect_answers]
+    //   .sort(() => Math.random() - half);
+    // console.log(answers);
     return (
       <div>
+        <h2>{timer}</h2>
         <p data-testid="question-category">{question.category}</p>
         <p data-testid="question-text">{question.question}</p>
         <p>{question.correct_answer}</p>
@@ -36,6 +75,7 @@ class Questions extends Component {
                 id={ i }
                 type="button"
                 data-testid={ datatestid }
+                disabled={ disabled }
                 onClick={ handleClick }
               >
                 {a}
