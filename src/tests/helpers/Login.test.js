@@ -47,17 +47,17 @@ test('Testa se o botão està desabilitado è habilitado', () => {
 })
 
     test('Testa se ao clicar no botão ele redirecioana para rota game', async () => {
-       const { history } = renderWithRouterAndRedux(<App />);
+      const { history } = renderWithRouterAndRedux(<App />);
 
-       const playButton = screen.getByTestId('btn-play');
-       const emailInput = screen.getByTestId('input-gravatar-email');
-       const nameInput = screen.getByTestId('input-player-name');
+      const playButton = screen.getByTestId('btn-play');
+      const emailInput = screen.getByTestId('input-gravatar-email');
+      const nameInput = screen.getByTestId('input-player-name');
 
-        userEvent.type(emailInput, 'email@gmail.com');
-        userEvent.type(nameInput, 'name');
-        userEvent.click(playButton);
-        await waitForElementToBeRemoved(nameInput);
-        expect(history.location.pathname).toBe('/game');
+      userEvent.type(emailInput, 'email@gmail.com');
+      userEvent.type(nameInput, 'name');
+      userEvent.click(playButton);
+      await waitForElementToBeRemoved(nameInput);
+      expect(history.location.pathname).toBe('/game');
 
     })
 });
