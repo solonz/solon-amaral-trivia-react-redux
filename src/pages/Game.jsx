@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 class Game extends Component {
   render() {
     const { gravatarEmail, nome, score } = this.props;
-    console.log(nome, gravatarEmail, score);
     return (
       <div>
         <img
