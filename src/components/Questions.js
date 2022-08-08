@@ -16,17 +16,31 @@ class Questions extends Component {
         <div data-testid="answer-options">
           {answers.map((a, i) => {
             let datatestid = '';
-            if (a === question.correct_answer) { datatestid = 'correct-answer'; } else {
+            if (a === question.correct_answer) {
+              datatestid = 'correct-answer';
+            } else {
               datatestid = `wrong-answer-${i}`;
             }
+            const handleClick = () => (
+              answers.forEach((element, idx) => {
+                const button = document.getElementById(idx);
+                if (element === question.correct_answer) {
+                  button.className = 'correct';
+                } else {
+                  button.className = 'incorrect';
+                }
+              }));
             return (
               <button
                 key={ a }
+                id={ i }
                 type="button"
                 data-testid={ datatestid }
+                onClick={ handleClick }
               >
                 {a}
-              </button>);
+              </button>
+            );
           })}
         </div>
       </div>
