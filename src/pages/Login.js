@@ -1,6 +1,8 @@
 import React from 'react';
 import propTypes from 'prop-types';
+import { connect } from 'react-redux';
 import getApi from '../services/api';
+import { LOGIN_INFO } from '../redux/actions/typeNames';
 
 class Login extends React.Component {
   state = {
@@ -17,8 +19,9 @@ class Login extends React.Component {
 
   fetchToken = async () => {
     await getApi();
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
     history.push('/game');
+    dispatch({ type: LOGIN_INFO, payload: this.state });
   }
 
   render() {
@@ -68,7 +71,8 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-  history: propTypes.objectOf(propTypes.any).isRequired,
-};
+  history: propTypes.objectOf(propTypes.any),
+  dispatch: propTypes.func,
+}.isRequired;
 
-export default Login;
+export default connect()(Login);
