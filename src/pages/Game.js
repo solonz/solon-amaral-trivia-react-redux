@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
+import Header from '../components/Header';
 import { getQuestions } from '../services/api';
 import Questions from '../Components/Questions';
 
@@ -8,7 +9,6 @@ export default class Game extends Component {
     super();
     this.state = {
       questions: [],
-      id: '',
     };
   }
 
@@ -30,6 +30,7 @@ export default class Game extends Component {
     const { questions } = this.state;
     return (
       <div>
+        <Header />
         <Questions questions={ questions.length === 0 ? 'não estou aqui' : questions } />
       </div>
 
