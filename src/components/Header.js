@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-class Game extends Component {
+class Header extends Component {
   render() {
     const { gravatarEmail, nome, score } = this.props;
     return (
@@ -28,9 +28,9 @@ const mapStateToProps = ({ player: { gravatarEmail, nome, score } }) => ({
   score,
 });
 
-Game.propTypes = {
+Header.propTypes = {
   gravatarEmail: PropTypes.string,
   nome: PropTypes.string,
 }.isRequired;
 
-export default connect(mapStateToProps)(Game);
+export default connect(mapStateToProps)(Header);
