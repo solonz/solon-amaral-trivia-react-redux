@@ -1,6 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import getApi from '../services/api';
+import { getApi } from '../services/api';
 
 class Login extends React.Component {
   state = {
