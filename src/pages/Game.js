@@ -12,6 +12,10 @@ export default class Game extends Component {
     };
   }
 
+  componentDidMount() {
+    this.lordHaveMercy();
+  }
+
   lordHaveMercy = async () => {
     const FAILED_CODE = 3;
     const returnedQuestions = await getQuestions();
@@ -21,19 +25,21 @@ export default class Game extends Component {
       history.push('/');
     } else {
       this.setState({
-        questions: returnedQuestions,
+        questions: returnedQuestions.results,
       });
     }
   }
 
   render() {
     const { questions } = this.state;
+    console.log(questions);
     return (
       <div>
         <Header />
-        <Questions questions={ questions.length === 0 ? 'não estou aqui' : questions } />
+        {questions.length > 0 && <Questions
+          questions={ questions }
+        />}
       </div>
-
     );
   }
 }
