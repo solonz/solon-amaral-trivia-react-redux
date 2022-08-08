@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import fetchTokenTrivia from '../services';
-
-// import { connect } from 'react-redux';
+import { emailAction, usernameAction } from '../redux/actions';
 
 class Login extends Component {
   constructor() {
@@ -31,8 +31,11 @@ class Login extends Component {
   async handleClick() {
     const token = await fetchTokenTrivia();
     localStorage.setItem('token', token);
-    const { history } = this.props;
+    const { history, emailDispatch, usernameDispatch } = this.props;
+    const { email, userName } = this.state;
     history.push('/game');
+    emailDispatch(email);
+    usernameDispatch(userName);
   }
 
   render() {
@@ -75,10 +78,17 @@ class Login extends Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => ({
+  emailDispatch: (payload) => dispatch(emailAction(payload)),
+  usernameDispatch: (payload) => dispatch(usernameAction(payload)),
+});
+
 Login.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  emailDispatch: PropTypes.func.isRequired,
+  usernameDispatch: PropTypes.func.isRequired,
 };
 
-export default Login;
+export default connect(null, mapDispatchToProps)(Login);
