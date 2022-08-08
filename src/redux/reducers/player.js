@@ -1,7 +1,7 @@
 const INITAL_STATE = {
   name: '',
   assertions: '',
-  score: '',
+  score: 0,
   gravatarEmail: '',
 };
 
@@ -11,6 +11,8 @@ const player = (state = INITAL_STATE, action) => {
     return { ...state, gravatarEmail: action.payload };
   case 'USERNAME_LOGIN':
     return { ...state, name: action.payload };
+  case 'SCORE_REGISTER':
+    return { ...state, score: state.score + action.payload };
   default:
     return state;
   }

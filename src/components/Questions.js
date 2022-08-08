@@ -40,7 +40,7 @@ class Questions extends Component {
   }
 
   render() {
-    const { question } = this.props;
+    const { question, handleScore } = this.props;
     const { timer, disabled, answers } = this.state;
     // const half = 0.5;
     // const answers = [question.correct_answer, ...question.incorrect_answers]
@@ -48,7 +48,11 @@ class Questions extends Component {
     // console.log(answers);
     return (
       <div>
-        <h2>{timer}</h2>
+        <h2
+          id="timer"
+        >
+          {timer}
+        </h2>
         <p data-testid="question-category">{question.category}</p>
         <p data-testid="question-text">{question.question}</p>
         <p>{question.correct_answer}</p>
@@ -76,7 +80,10 @@ class Questions extends Component {
                 type="button"
                 data-testid={ datatestid }
                 disabled={ disabled }
-                onClick={ handleClick }
+                onClick={ (event) => {
+                  handleClick();
+                  handleScore(question.difficulty, event);
+                } }
               >
                 {a}
               </button>
@@ -95,7 +102,9 @@ Questions.propTypes = {
     incorrect_answers: PropTypes.arrayOf(PropTypes.string),
     category: PropTypes.string,
     question: PropTypes.string,
+    difficulty: PropTypes.string,
   }).isRequired,
+  handleScore: PropTypes.func.isRequired,
 };
 
 export default Questions;
