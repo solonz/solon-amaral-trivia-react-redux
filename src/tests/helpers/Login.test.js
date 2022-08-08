@@ -3,7 +3,6 @@ import { screen, render, wait, waitFor, waitForElementToBeRemoved } from "@testi
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import App from "../../App";
-import Login from "../../pages/Login";
 
 describe('Conjunto de teste requisito 4', () => {
 test('Testa se estão na tela', () => {
