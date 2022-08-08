@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
+import './Questions.css';
 
 export default class Questions extends Component {
   state = {
     id: 0,
     randomized: [],
+    isDisabled: true,
   }
 
   componentDidMount() {
@@ -18,19 +20,28 @@ export default class Questions extends Component {
     const qualquer = [questions[id].correct_answer, ...questions[id].incorrect_answers];
     qualquer.sort(() => Math.random() - NUMBER);
     this.setState({ randomized: qualquer });
+    this.setState({ isDisabled: true });
   }
 
   setId = () => {
     this.setState((prevState) => ({
       ...prevState,
       id: prevState.id + 1,
-    }));
-    this.randomQuestions();
+    }), () => this.randomQuestions());
+  };
+
+  showColors = (alt) => {
+    const { id } = this.state;
+    const { questions } = this.props;
+    return (
+      questions[id].correct_answer === alt
+        ? 'correct-answer' : 'wrong-answer'
+    );
   };
 
   render() {
     const { questions } = this.props;
-    const { id, randomized } = this.state;
+    const { id, randomized, isDisabled } = this.state;
 
     return (
       <div>
@@ -46,11 +57,22 @@ export default class Questions extends Component {
                   ? 'correct-answer' : `wrong-answer-${index}` }
                 type="button"
                 key={ index }
+                className={ !isDisabled ? this.showColors(alt) : null }
+                onClick={ () => this.setState({ isDisabled: false }) }
               >
                 {alt}
               </button>))}
           </div>
-          <button type="button" onClick={ this.setId }>Proximo</button>
+          {!isDisabled
+          && (
+            <button
+              type="button"
+              data-testid="btn-next"
+              onClick={ this.setId }
+            >
+              Next
+            </button>
+          )}
         </aside>
       </div>
     );

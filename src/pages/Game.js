@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import Header from '../components/Header';
 import { getQuestions } from '../services/api';
-import Questions from '../Components/Questions';
+import Questions from '../components/Questions';
 
 export default class Game extends Component {
   constructor() {
