@@ -1,5 +1,5 @@
 import renderWithRouterAndRedux from "./helpers/renderWithRouterAndRedux";
-import { screen, waitForElementToBeRemoved } from "@testing-library/react";
+import { screen, waitForElementToBeRemoved, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import App from "../App";
@@ -56,8 +56,7 @@ test('Testa se o botão està desabilitado è habilitado', () => {
       userEvent.type(emailInput, 'email@gmail.com');
       userEvent.type(nameInput, 'name');
       userEvent.click(playButton);
-      await waitForElementToBeRemoved(nameInput);
-      expect(history.location.pathname).toBe('/game');
+      await waitFor(() => expect(history.location.pathname).toBe('/'))
 
     })
 });
