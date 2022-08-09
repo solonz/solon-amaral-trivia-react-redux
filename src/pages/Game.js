@@ -14,6 +14,7 @@ class Game extends Component {
       questions: [],
       index: 0,
       assertions: 0,
+      next: '',
     };
   }
 
@@ -47,11 +48,15 @@ class Game extends Component {
       });
       assertionDispatch(assertions);
     }
+    this.setState({
+      next: true,
+    });
   }
 
   render() {
-    const { questions, index } = this.state;
-
+    const { questions, index, next } = this.state;
+    const { gravatarEmail, name, score } = this.props;
+    const hash = md5(gravatarEmail).toString();
     return (
       <section>
         <Header />
@@ -61,6 +66,16 @@ class Game extends Component {
             handleScore={ this.handleScore }
           />
           : <p>Carregando</p>}
+        {
+          (next) && (
+            <button
+              type="button"
+              data-testid="btn-next"
+            >
+              Next
+            </button>
+          )
+        }
       </section>
     );
   }
