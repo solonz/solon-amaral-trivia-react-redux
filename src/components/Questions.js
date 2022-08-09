@@ -7,20 +7,22 @@ export default class Questions extends Component {
     id: 0,
     randomized: [],
     isDisabled: true,
+    seconds: 30,
+    disableAnswers: false,
   }
 
   componentDidMount() {
     this.randomQuestions();
+    this.setTimer();
   }
 
   randomQuestions = () => {
     const NUMBER = 0.5;
     const { id } = this.state;
     const { questions } = this.props;
-    const qualquer = [questions[id].correct_answer, ...questions[id].incorrect_answers];
-    qualquer.sort(() => Math.random() - NUMBER);
-    this.setState({ randomized: qualquer });
-    this.setState({ isDisabled: true });
+    const answersArr = [questions[id].correct_answer, ...questions[id].incorrect_answers];
+    answersArr.sort(() => Math.random() - NUMBER);
+    this.setState({ randomized: answersArr, isDisabled: true });
   }
 
   setId = () => {
@@ -28,6 +30,7 @@ export default class Questions extends Component {
       ...prevState,
       id: prevState.id + 1,
     }), () => this.randomQuestions());
+    this.resetTimerOnPage();
   };
 
   showColors = (alt) => {
@@ -39,9 +42,32 @@ export default class Questions extends Component {
     );
   };
 
+  resetTimerOnPage = () => {
+    const { seconds } = this.state;
+    this.setState({ seconds: 30, isDisabled: true, disableAnswers: false });
+    if (seconds === 0) {
+      this.setTimer();
+    }
+  }
+
+  setTimer = () => {
+    const intervalTime = 1000;
+    const timer = setInterval(() => {
+      this.setState((prevState) => ({
+        ...prevState,
+        seconds: prevState.seconds - 1,
+      }));
+      const { seconds } = this.state;
+      if (seconds === 0) {
+        clearInterval(timer);
+        this.setState({ disableAnswers: true, isDisabled: false });
+      }
+    }, intervalTime);
+  };
+
   render() {
     const { questions } = this.props;
-    const { id, randomized, isDisabled } = this.state;
+    const { id, randomized, isDisabled, seconds, disableAnswers } = this.state;
 
     return (
       <div>
@@ -59,6 +85,7 @@ export default class Questions extends Component {
                 key={ index }
                 className={ !isDisabled ? this.showColors(alt) : null }
                 onClick={ () => this.setState({ isDisabled: false }) }
+                disabled={ disableAnswers }
               >
                 {alt}
               </button>))}
@@ -74,6 +101,13 @@ export default class Questions extends Component {
             </button>
           )}
         </aside>
+        <div>
+          <p>
+            {
+              seconds
+            }
+          </p>
+        </div>
       </div>
     );
   }
