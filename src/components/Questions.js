@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { scoreAction, assertionAction } from '../redux/actions';
 
 class Questions extends Component {
   constructor() {
@@ -9,6 +11,7 @@ class Questions extends Component {
       timer: 30,
       disabled: false,
       answers: [],
+      next: false,
     };
   }
 
@@ -39,13 +42,36 @@ class Questions extends Component {
     this.setState({ answers });
   }
 
+  handleScore = (difficulty, { target }) => {
+    const { scoreDispatch, assertionDispatch } = this.props;
+    const timer = Number(document.getElementById('timer').innerHTML);
+    const summary = {
+      hard: 3,
+      medium: 2,
+      easy: 1,
+    };
+    const CONSTANT = 10;
+    const equation = CONSTANT + (timer * summary[difficulty]);
+    if (target.className === 'correct') {
+      scoreDispatch(equation);
+      assertionDispatch();
+    }
+    this.setState({
+      next: true,
+    });
+  }
+
+  handleAnswers = () => {
+    this.randomAswers();
+    this.setState({
+      next: false,
+      timer: 30,
+    });
+  }
+
   render() {
-    const { question, handleScore } = this.props;
-    const { timer, disabled, answers } = this.state;
-    // const half = 0.5;
-    // const answers = [question.correct_answer, ...question.incorrect_answers]
-    //   .sort(() => Math.random() - half);
-    // console.log(answers);
+    const { question, handleNext } = this.props;
+    const { timer, disabled, answers, next } = this.state;
     return (
       <div>
         <h2
@@ -82,7 +108,7 @@ class Questions extends Component {
                 disabled={ disabled }
                 onClick={ (event) => {
                   handleClick();
-                  handleScore(question.difficulty, event);
+                  this.handleScore(question.difficulty, event);
                 } }
               >
                 {a}
@@ -90,11 +116,30 @@ class Questions extends Component {
             );
           })}
         </div>
+        {
+          (next) && (
+            <button
+              type="button"
+              data-testid="btn-next"
+              onClick={ async () => {
+                await handleNext();
+                this.handleAnswers();
+              } }
+            >
+              Next
+            </button>
+          )
+        }
       </div>
 
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  scoreDispatch: (payload) => dispatch(scoreAction(payload)),
+  assertionDispatch: (payload) => dispatch(assertionAction(payload)),
+});
 
 Questions.propTypes = {
   question: PropTypes.shape({
@@ -104,7 +149,9 @@ Questions.propTypes = {
     question: PropTypes.string,
     difficulty: PropTypes.string,
   }).isRequired,
-  handleScore: PropTypes.func.isRequired,
+  scoreDispatch: PropTypes.func.isRequired,
+  assertionDispatch: PropTypes.func.isRequired,
+  handleNext: PropTypes.func.isRequired,
 };
 
-export default Questions;
+export default connect(null, mapDispatchToProps)(Questions);
