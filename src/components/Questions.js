@@ -13,20 +13,22 @@ class Questions extends Component {
     isDisabled: true,
     countAssertions: 0,
     redirect: false,
+    seconds: 30,
+    disableAnswers: false,
   }
 
   componentDidMount() {
     this.randomQuestions();
+    this.setTimer();
   }
 
   randomQuestions = () => {
     const NUMBER = 0.5;
     const { id } = this.state;
     const { questions } = this.props;
-    const qualquer = [questions[id].correct_answer, ...questions[id].incorrect_answers];
-    qualquer.sort(() => Math.random() - NUMBER);
-    this.setState({ randomized: qualquer });
-    this.setState({ isDisabled: true });
+    const answersArr = [questions[id].correct_answer, ...questions[id].incorrect_answers];
+    answersArr.sort(() => Math.random() - NUMBER);
+    this.setState({ randomized: answersArr, isDisabled: true });
   }
 
   setId = () => {
@@ -34,7 +36,9 @@ class Questions extends Component {
     this.setState((prevState) => ({
       ...prevState,
       id: prevState.id + 1,
-    }), ({ id } = this.state) => id <= MAGICFOUR && this.randomQuestions());
+    }), ({ id } = this.state) => id <= MAGICFOUR && this.randomQuestions(),
+    () => this.randomQuestions());
+    this.resetTimerOnPage();
   };
 
   countAssertions = () => {
@@ -63,10 +67,33 @@ class Questions extends Component {
     );
   };
 
+  resetTimerOnPage = () => {
+    const { seconds } = this.state;
+    this.setState({ seconds: 30, isDisabled: true, disableAnswers: false });
+    if (seconds === 0) {
+      this.setTimer();
+    }
+  }
+
+  setTimer = () => {
+    const intervalTime = 1000;
+    const timer = setInterval(() => {
+      this.setState((prevState) => ({
+        ...prevState,
+        seconds: prevState.seconds - 1,
+      }));
+      const { seconds } = this.state;
+      if (seconds === 0) {
+        clearInterval(timer);
+        this.setState({ disableAnswers: true, isDisabled: false });
+      }
+    }, intervalTime);
+  };
+
   render() {
     const { questions } = this.props;
-    const { id, randomized, isDisabled } = this.state;
     const MAGICFOUR = 4;
+    const { id, randomized, isDisabled, seconds, disableAnswers } = this.state;
 
     return (
       <div>
@@ -88,6 +115,7 @@ class Questions extends Component {
                         key={ index }
                         className={ !isDisabled ? this.showColors(alt) : null }
                         onClick={ (e) => this.assertions(e) }
+                        disabled={ disableAnswers }
                       >
                         {alt}
                       </button>))}
@@ -102,6 +130,11 @@ class Questions extends Component {
               Next
             </button>
           )}
+                  <p>
+                    {
+                      seconds
+                    }
+                  </p>
                 </aside>
               </div>
             )
