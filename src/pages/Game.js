@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import getTriviaApi from '../services/triviaAPI';
 import Questions from '../components/Questions';
 import Header from '../components/Header';
-import { scoreAction } from '../redux/actions';
+import { assertionAction, scoreAction } from '../redux/actions';
 
 class Game extends Component {
   constructor() {
@@ -13,6 +13,7 @@ class Game extends Component {
     this.state = {
       questions: [],
       index: 0,
+      assertions: 0,
     };
   }
 
@@ -29,7 +30,8 @@ class Game extends Component {
   }
 
   handleScore = (difficulty, { target }) => {
-    const { scoreDispatch } = this.props;
+    const { scoreDispatch, assertionDispatch } = this.props;
+    const { assertions } = this.state;
     const timer = Number(document.getElementById('timer').innerHTML);
     const summary = {
       hard: 3,
@@ -40,6 +42,10 @@ class Game extends Component {
     const equation = CONSTANT + (timer * summary[difficulty]);
     if (target.className === 'correct') {
       scoreDispatch(equation);
+      this.setState({
+        assertions,
+      });
+      assertionDispatch(assertions);
     }
   }
 
@@ -68,6 +74,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   scoreDispatch: (payload) => dispatch(scoreAction(payload)),
+  assertionDispatch: (payload) => dispatch(assertionAction(payload)),
 });
 
 Game.propTypes = {
@@ -75,6 +82,7 @@ Game.propTypes = {
     push: PropTypes.func,
   }).isRequired,
   scoreDispatch: PropTypes.func.isRequired,
+  assertionDispatch: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
