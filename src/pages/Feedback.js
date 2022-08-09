@@ -6,28 +6,11 @@ import Header from '../components/Header';
 class Feedback extends Component {
   constructor() {
     super();
-    this.state = {
-      score: 0,
-      assertions: 0,
-    };
     this.returnFeedback = this.returnFeedback.bind(this);
-    this.setScoreAndAssertions = this.setScoreAndAssertions.bind(this);
-  }
-
-  componentDidMount() {
-    this.setScoreAndAssertions();
-  }
-
-  setScoreAndAssertions() {
-    const { score, assertions } = this.props;
-    this.setState({
-      score,
-      assertions,
-    });
   }
 
   returnFeedback(phrase) {
-    const { score, assertions } = this.state;
+    const { score, assertions } = this.props;
     return (
       <div>
         <Header />
