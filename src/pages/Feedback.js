@@ -9,16 +9,23 @@ class Feedback extends Component {
     this.returnFeedback = this.returnFeedback.bind(this);
   }
 
-  returnFeedback(phrase) {
+  returnFeedback() {
     const { score, assertions } = this.props;
+    const THREE = 3;
+    const caseWin = (
+
+      <h1 data-testid="feedback-text">Well Done!</h1>
+
+    );
+    const caseLose = (
+
+      <h1 data-testid="feedback-text">Could be better...</h1>
+
+    );
     return (
       <div>
         <Header />
-        <p
-          data-testid="feedback-text"
-        >
-          {phrase}
-        </p>
+        <div>{ assertions >= THREE ? caseWin : caseLose }</div>
         <span>
           Você acertou
           <p data-testid="feedback-total-question">{ assertions }</p>
@@ -37,7 +44,7 @@ class Feedback extends Component {
     return (
       <div>
         <h1>Feedback</h1>
-        {this.returnFeedback('Well done!')}
+        {this.returnFeedback()}
       </div>
     );
   }
