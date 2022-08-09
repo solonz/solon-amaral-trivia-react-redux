@@ -1,4 +1,4 @@
-import { LOGIN_INFO } from '../actions/typeNames';
+import { COUNT_ASSERTIONS, LOGIN_INFO } from '../actions/typeNames';
 
 const INITIAL_STATE = {
   nome: '',
@@ -14,6 +14,11 @@ export default function player(state = INITIAL_STATE, action) {
       ...state,
       nome: action.payload.name,
       gravatarEmail: action.payload.email,
+    };
+  case COUNT_ASSERTIONS:
+    return {
+      ...state,
+      assertions: action.countAssertions,
     };
   default:
     return state;
