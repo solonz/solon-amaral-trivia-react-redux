@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import md5 from 'crypto-js/md5';
 import getTriviaApi from '../services/triviaAPI';
 import Questions from '../components/Questions';
-import { scoreAction } from '../redux/actions';
+import Header from '../components/Header';
+import { assertionAction, scoreAction } from '../redux/actions';
 
 class Game extends Component {
   constructor() {
@@ -13,6 +13,7 @@ class Game extends Component {
     this.state = {
       questions: [],
       index: 0,
+      assertions: 0,
       next: '',
     };
   }
@@ -30,7 +31,8 @@ class Game extends Component {
   }
 
   handleScore = (difficulty, { target }) => {
-    const { scoreDispatch } = this.props;
+    const { scoreDispatch, assertionDispatch } = this.props;
+    const { assertions } = this.state;
     const timer = Number(document.getElementById('timer').innerHTML);
     const summary = {
       hard: 3,
@@ -41,6 +43,10 @@ class Game extends Component {
     const equation = CONSTANT + (timer * summary[difficulty]);
     if (target.className === 'correct') {
       scoreDispatch(equation);
+      this.setState({
+        assertions,
+      });
+      assertionDispatch(assertions);
     }
     this.setState({
       next: true,
@@ -53,23 +59,7 @@ class Game extends Component {
     const hash = md5(gravatarEmail).toString();
     return (
       <section>
-        <header>
-          <img
-            src={ `https://www.gravatar.com/avatar/${hash}` }
-            data-testid="header-profile-picture"
-            alt="avatar do usuário"
-          />
-          <span
-            data-testid="header-player-name"
-          >
-            { name }
-          </span>
-          <span
-            data-testid="header-score"
-          >
-            { score }
-          </span>
-        </header>
+        <Header />
         {questions
           .length !== 0 ? <Questions
             question={ questions[index] }
@@ -99,16 +89,15 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   scoreDispatch: (payload) => dispatch(scoreAction(payload)),
+  assertionDispatch: (payload) => dispatch(assertionAction(payload)),
 });
 
 Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
-  gravatarEmail: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
   scoreDispatch: PropTypes.func.isRequired,
-  score: PropTypes.number.isRequired,
+  assertionDispatch: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
