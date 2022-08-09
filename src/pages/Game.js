@@ -13,6 +13,7 @@ class Game extends Component {
     this.state = {
       questions: [],
       index: 0,
+      next: '',
     };
   }
 
@@ -41,10 +42,13 @@ class Game extends Component {
     if (target.className === 'correct') {
       scoreDispatch(equation);
     }
+    this.setState({
+      next: true,
+    });
   }
 
   render() {
-    const { questions, index } = this.state;
+    const { questions, index, next } = this.state;
     const { gravatarEmail, name, score } = this.props;
     const hash = md5(gravatarEmail).toString();
     return (
@@ -72,6 +76,16 @@ class Game extends Component {
             handleScore={ this.handleScore }
           />
           : <p>Carregando</p>}
+        {
+          (next) && (
+            <button
+              type="button"
+              data-testid="btn-next"
+            >
+              Next
+            </button>
+          )
+        }
       </section>
     );
   }
