@@ -1,8 +1,8 @@
-import renderWithRouterAndRedux from "./renderWithRouterAndRedux";
+import renderWithRouterAndRedux from "./helpers/renderWithRouterAndRedux";
 import { screen, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
-import App from "../../App";
+import App from "../App";
 
 describe('Conjunto de teste requisito 4', () => {
 test('Testa se estão na tela', () => {

@@ -76,6 +76,7 @@ class Questions extends Component {
       <div>
         <h2
           id="timer"
+          data-testid="timer"
         >
           {timer}
         </h2>
