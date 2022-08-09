@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Header from '../components/Header';
 
 class Feedback extends Component {
   render() {
@@ -8,9 +9,10 @@ class Feedback extends Component {
     const MAGICTHREE = 3;
     return (
       <div>
+        <Header />
         <h1 data-testid="feedback-text">
           {
-            assertions < MAGICTHREE ? 'Could be better...' : 'Well done!'
+            assertions < MAGICTHREE ? 'Could be better...' : 'Well Done!'
           }
         </h1>
       </div>
