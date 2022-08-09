@@ -48,7 +48,7 @@ class Game extends Component {
             question={ questions[index] }
             handleNext={ this.handleNext }
           />
-          : <p>Carregando</p>}
+          : <p data-testid="loading">Carregando</p>}
       </section>
     );
   }
