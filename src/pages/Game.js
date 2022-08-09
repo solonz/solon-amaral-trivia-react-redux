@@ -32,7 +32,6 @@ export default class Game extends Component {
 
   render() {
     const { questions } = this.state;
-    console.log(questions);
     return (
       <div>
         <Header />
