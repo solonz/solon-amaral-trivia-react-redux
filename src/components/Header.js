@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 class Header extends Component {
   render() {
     const { gravatarEmail, nome, score } = this.props;
+
     return (
       <div>
         <img
@@ -15,7 +16,7 @@ class Header extends Component {
         />
         <h1 data-testid="header-player-name">{ nome }</h1>
         <h1 data-testid="header-score">
-          { `Score: ${score}` }
+          {score}
         </h1>
       </div>
     );

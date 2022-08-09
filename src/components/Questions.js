@@ -15,6 +15,8 @@ class Questions extends Component {
     redirect: false,
     seconds: 30,
     disableAnswers: false,
+    stopTimer: false,
+    score: 0,
   }
 
   componentDidMount() {
@@ -56,6 +58,7 @@ class Questions extends Component {
         countAssertions: prevState.countAssertions + 1,
       }));
     }
+    this.handleAnswerClick(e);
   }
 
   showColors = (alt) => {
@@ -68,10 +71,41 @@ class Questions extends Component {
   };
 
   resetTimerOnPage = () => {
-    const { seconds } = this.state;
-    this.setState({ seconds: 30, isDisabled: true, disableAnswers: false });
-    if (seconds === 0) {
+    const { seconds, stopTimer } = this.state;
+    if (seconds === 0 || stopTimer) {
       this.setTimer();
+    }
+    this.setState({ seconds: 30,
+      isDisabled: true,
+      disableAnswers: false,
+      stopTimer: false });
+  }
+
+  scoreCalculator = () => {
+    const { seconds, id } = this.state;
+    const { questions } = this.props;
+    const { difficulty } = questions[id];
+    const obj = {
+      hard: 3,
+      medium: 2,
+      easy: 1,
+    };
+
+    return (seconds * obj[difficulty]);
+  }
+
+  handleAnswerClick = ({ target }) => {
+    this.setState({ isDisabled: false, stopTimer: true, disableAnswers: true });
+    if (target.dataset.testid === 'correct-answer') {
+      const CALC_NUMBER = 10;
+      this.setState((prevState) => ({
+        ...prevState,
+        score: prevState.score + CALC_NUMBER + this.scoreCalculator(),
+      }), () => {
+        const { dispatch } = this.props;
+        const { score } = this.state;
+        dispatch({ type: 'SCORE_UPDATE', score });
+      });
     }
   }
 
@@ -82,8 +116,8 @@ class Questions extends Component {
         ...prevState,
         seconds: prevState.seconds - 1,
       }));
-      const { seconds } = this.state;
-      if (seconds === 0) {
+      const { seconds, stopTimer } = this.state;
+      if (seconds === 0 || stopTimer) {
         clearInterval(timer);
         this.setState({ disableAnswers: true, isDisabled: false });
       }
