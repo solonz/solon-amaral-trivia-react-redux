@@ -52,7 +52,7 @@ class Feedback extends Component {
           onClick={ this.playAgainBtn }
         >
 
-          Pla again
+          Play again
         </button>
         <button
           data-testid="btn-ranking"
