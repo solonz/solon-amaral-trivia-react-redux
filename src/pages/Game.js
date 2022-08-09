@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
 import getTriviaApi from '../services/triviaAPI';
 import Questions from '../components/Questions';
+import { scoreAction } from '../redux/actions';
 
 class Game extends Component {
   constructor() {
@@ -27,9 +28,24 @@ class Game extends Component {
     else this.setState({ questions: result.results });
   }
 
+  handleScore = (difficulty, { target }) => {
+    const { scoreDispatch } = this.props;
+    const timer = Number(document.getElementById('timer').innerHTML);
+    const summary = {
+      hard: 3,
+      medium: 2,
+      easy: 1,
+    };
+    const CONSTANT = 10;
+    const equation = CONSTANT + (timer * summary[difficulty]);
+    if (target.className === 'correct') {
+      scoreDispatch(equation);
+    }
+  }
+
   render() {
     const { questions, index } = this.state;
-    const { gravatarEmail, name } = this.props;
+    const { gravatarEmail, name, score } = this.props;
     const hash = md5(gravatarEmail).toString();
     return (
       <section>
@@ -47,11 +63,15 @@ class Game extends Component {
           <span
             data-testid="header-score"
           >
-            { 0 }
+            { score }
           </span>
         </header>
         {questions
-          .length !== 0 ? <Questions question={ questions[index] } /> : <p>Carregando</p>}
+          .length !== 0 ? <Questions
+            question={ questions[index] }
+            handleScore={ this.handleScore }
+          />
+          : <p>Carregando</p>}
       </section>
     );
   }
@@ -60,6 +80,11 @@ class Game extends Component {
 const mapStateToProps = (state) => ({
   gravatarEmail: state.player.gravatarEmail,
   name: state.player.name,
+  score: state.player.score,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  scoreDispatch: (payload) => dispatch(scoreAction(payload)),
 });
 
 Game.propTypes = {
@@ -68,6 +93,8 @@ Game.propTypes = {
   }).isRequired,
   gravatarEmail: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  scoreDispatch: PropTypes.func.isRequired,
+  score: PropTypes.number.isRequired,
 };
 
-export default connect(mapStateToProps)(Game);
+export default connect(mapStateToProps, mapDispatchToProps)(Game);
