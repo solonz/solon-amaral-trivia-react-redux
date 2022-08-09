@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import md5 from 'crypto-js/md5';
 import getTriviaApi from '../services/triviaAPI';
 import Questions from '../components/Questions';
+import Header from '../components/Header';
 import { scoreAction } from '../redux/actions';
 
 class Game extends Component {
@@ -45,27 +45,10 @@ class Game extends Component {
 
   render() {
     const { questions, index } = this.state;
-    const { gravatarEmail, name, score } = this.props;
-    const hash = md5(gravatarEmail).toString();
+
     return (
       <section>
-        <header>
-          <img
-            src={ `https://www.gravatar.com/avatar/${hash}` }
-            data-testid="header-profile-picture"
-            alt="avatar do usuário"
-          />
-          <span
-            data-testid="header-player-name"
-          >
-            { name }
-          </span>
-          <span
-            data-testid="header-score"
-          >
-            { score }
-          </span>
-        </header>
+        <Header />
         {questions
           .length !== 0 ? <Questions
             question={ questions[index] }
@@ -91,10 +74,7 @@ Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
-  gravatarEmail: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
   scoreDispatch: PropTypes.func.isRequired,
-  score: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

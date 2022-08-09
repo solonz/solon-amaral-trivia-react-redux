@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
 
-class Ranking extends React.Component {
+class Ranking extends Component {
     initialPageButton = () => {
       const { history } = this.props;
       history.push('/');

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-class Feedback extends React.Component {
+class Feedback extends Component {
   constructor() {
     super();
     this.state = {
@@ -32,7 +32,6 @@ class Feedback extends React.Component {
         <p
           data-testid="feedback-text"
         >
-          {' '}
           {phrase}
         </p>
         <span>
