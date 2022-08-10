@@ -68,4 +68,5 @@ describe('Requisito "(5-11)" GAME ', () => {
     expect(questionOld).not.toBe(questionNew);
     })
   });
+  test('', () => {})
 });
