@@ -10,3 +10,11 @@ export async function getQuestions() {
   const result = await api.json();
   return result;
 }
+
+export const setLocalStorage = (gravatar, player) => {
+  const oldLocal = JSON.parse(localStorage.getItem('ranking'));
+  localStorage.setItem('ranking', JSON
+    .stringify(
+      [...oldLocal, { name: player.nome, score: player.score, picture: gravatar }],
+    ));
+};

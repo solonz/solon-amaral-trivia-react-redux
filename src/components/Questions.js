@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import md5 from 'crypto-js/md5';
 import propTypes from 'prop-types';
 import './Questions.css';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { COUNT_ASSERTIONS } from '../redux/actions/typeNames';
+import { setLocalStorage } from '../services/api';
 
 const CORRECT_ANSWER = 'correct-answer';
 class Questions extends Component {
@@ -22,6 +24,9 @@ class Questions extends Component {
   componentDidMount() {
     this.randomQuestions();
     this.setTimer();
+    if (!localStorage.getItem('ranking')) {
+      localStorage.setItem('ranking', JSON.stringify([]));
+    }
   }
 
   randomQuestions = () => {
@@ -45,8 +50,10 @@ class Questions extends Component {
 
   countAssertions = () => {
     const { countAssertions } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, player } = this.props;
     dispatch({ type: COUNT_ASSERTIONS, countAssertions });
+    const gravatarEmail = `https://www.gravatar.com/avatar/${md5(player.gravatarEmail).toString()}`;
+    setLocalStorage(gravatarEmail, player);
     return (<Redirect to="/feedback" />);
   }
 
@@ -184,4 +191,8 @@ Questions.propTypes = {
   dispatch: propTypes.func,
 }.isRequired;
 
-export default connect()(Questions);
+const mapStateToProps = ({ player }) => ({
+  player,
+});
+
+export default connect(mapStateToProps)(Questions);
