@@ -4,8 +4,18 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 
 class Feedback extends Component {
+  resetGame = (path) => {
+    const { history, dispatch } = this.props;
+    const reset = {
+      assertions: '',
+      score: 0,
+    };
+    dispatch({ type: 'SCORE_ASSERTIONS_RESET', reset });
+    history.push(path);
+  }
+
   render() {
-    const { assertions, score, history } = this.props;
+    const { assertions, score } = this.props;
     const MAGICTHREE = 3;
     return (
       <div>
@@ -20,14 +30,14 @@ class Feedback extends Component {
         <button
           type="button"
           data-testid="btn-play-again"
-          onClick={ () => history.push('/') }
+          onClick={ () => this.resetGame('/') }
         >
           Play Again
         </button>
         <button
           type="button"
           data-testid="btn-ranking"
-          onClick={ () => history.push('/ranking') }
+          onClick={ () => this.resetGame('/ranking') }
         >
           Ranking
         </button>

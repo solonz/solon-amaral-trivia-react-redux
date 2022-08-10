@@ -9,6 +9,11 @@ const INITIAL_STATE = {
 
 export default function player(state = INITIAL_STATE, action) {
   switch (action.type) {
+  case 'SCORE_ASSERTIONS_RESET':
+    return {
+      ...state,
+      ...action.reset,
+    };
   case LOGIN_INFO:
     return {
       ...state,
